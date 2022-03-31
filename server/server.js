@@ -13,7 +13,7 @@ app.use(bodyParse.json());
 (async () => {
     try {
 
-        app.use('/api', require('./routers'));
+        app.use('/ims-fyp/api', require('./routers'));
 
 
         app.listen(8080, () => {
