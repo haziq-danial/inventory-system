@@ -43,12 +43,12 @@ module.exports = {
 
     addAccount: async function (req,res) {
         try {
-            const { full_name, email, password } = req.body;
+            const { full_name, email, password, role_type } = req.body;
 
             let created_at = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toJSON().slice(0, 19).replace('T', ' ');
             let updated_at = created_at;
 
-            const [rows, fields] = await Account.add(full_name, email, password, created_at, updated_at);
+            const [rows, fields] = await Account.add(full_name, email, password, role_type, created_at, updated_at);
             res.status(200).json(rows);
 
         } catch (error) {
