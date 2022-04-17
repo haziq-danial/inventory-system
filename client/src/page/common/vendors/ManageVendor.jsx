@@ -2,10 +2,50 @@ import { Box, Button, Container, Grid, Paper, Table, TableBody, TableCell, Table
 import Title from "../../../components/Title";
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ManageVendor() {
 
     const navigate = useNavigate();
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            
+            let request = await fetch("http://localhost:8080/ims-fyp/api/vendors/get", {
+                method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+            });
+            
+            if(request.status === 200) {
+                let response = await request.json();
+
+                let rows = [];
+                let object = {};
+                let counter = 1;
+
+                response.forEach(item => {
+
+                    object.key = counter;
+                    object.company_name = item.company_name;
+                    object.brand = item.brand;
+                    object.contact = item.contact;
+                    object.address = item.address;
+                    object.email = item.email;
+                    rows.push(object);
+                    object = {};
+                    counter++;
+                });
+
+                setItems(rows);
+            }
+
+        })();
+    });
+    console.log(items);
+
 
     return (
         <Box
@@ -45,16 +85,18 @@ function ManageVendor() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>Company #1</TableCell>
-                                <TableCell>Brand #1</TableCell>
-                                <TableCell>0122222</TableCell>
-                                <TableCell>Address #1</TableCell>
-                                <TableCell>example@email.com</TableCell>
-                                <TableCell align="center">
-                                    <Button variant="contained">Action</Button>
-                                </TableCell>
-                            </TableRow>
+                                {items.map(item => (
+                                    <TableRow key={item.key}>
+                                        <TableCell>{item.company_name}</TableCell>
+                                        <TableCell>{item.brand}</TableCell>
+                                        <TableCell>{item.contact}</TableCell>
+                                        <TableCell>{item.address}</TableCell>
+                                        <TableCell>{item.email}</TableCell>
+                                        <TableCell align="center">
+                                            <Button variant="contained">Action</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                       </Table>
                   </Paper>

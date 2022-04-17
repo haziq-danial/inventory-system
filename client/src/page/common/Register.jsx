@@ -38,27 +38,27 @@ function Register() {
             let full_name = data.get('firstName') + " " + data.get('lastName');
 
             const response = await fetch("http://localhost:8080/api/auth/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					full_name: full_name,
-                    role_type: role,
-                    email: data.get('email'),
-                    password: data.get('password')
-				}),
-			});
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                full_name: full_name,
+                role_type: role,
+                email: data.get('email'),
+                password: data.get('password')
+              }),
+            });
 
             if (response.status === 200) {
-				await Swal({
-					title: "Success",
-					text: "You have successfully registered",
-					icon: "success",
-					button: "OK",
-				});
-				navigate("/login");
-			}
+              await Swal({
+                title: "Success",
+                text: "You have successfully registered",
+                icon: "success",
+                button: "OK",
+              });
+              navigate("/login");
+            }
 
         } catch (e) {
             console.log(e);

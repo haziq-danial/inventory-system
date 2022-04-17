@@ -42,6 +42,7 @@ module.exports = {
     addVendor: async function(req, res) {
         try {
             const { company_name, brand, contact, address, email } = req.body;
+            console.log(req.body);
 
             let created_at = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toJSON().slice(0, 19).replace('T', ' ');
             let updated_at = created_at;
