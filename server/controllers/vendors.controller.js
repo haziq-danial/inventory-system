@@ -1,12 +1,12 @@
-const Account = require('../models/Account');
+const Vendors = require('../models/Vendors');
+
 
 module.exports = {
 
-    // get 
-    getAllAccounts: async function(_req, res) {
+    getAllVendors: async function(_req, res) {
         try {
             
-            const [rows, fields] = await  Account.fetchAll();
+            const [rows, fields] = await Vendors.fetchAll();
 
             res.status(200).json(rows);
         } catch (error) {
@@ -16,13 +16,12 @@ module.exports = {
             });
         }
     },
-
-    getAccountById: async function(req, res) {
+    getVendorById: async function(req, res) {
         try {
             
-            const {user_id} = req.params;
+            const {vendor_id} = req.params;
 
-            const [rows, fields] = await Account.fetchById(user_id);
+            const [rows, fields] = await Vendors.fetchById(vendor_id);
             
             if (rows) {
                 res.status(200).json(rows);
@@ -40,15 +39,14 @@ module.exports = {
             });
         }
     },
-
-    addAccount: async function (req,res) {
+    addVendor: async function(req, res) {
         try {
-            const { full_name, email, password, role_type } = req.body;
+            const { company_name, brand, contact, address, email } = req.body;
 
             let created_at = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toJSON().slice(0, 19).replace('T', ' ');
             let updated_at = created_at;
 
-            const [rows, fields] = await Account.add(full_name, email, password, role_type, created_at, updated_at);
+            const [rows, fields] = await Vendors.add(company_name, brand, contact, address, email, created_at, updated_at);
             res.status(200).json(rows);
 
         } catch (error) {
@@ -58,14 +56,14 @@ module.exports = {
             });
         }
     },
-
-    updateAccount: async function(req, res) {
+    updateVendor: async function(req, res) {
         try {
-            const { user_id, full_name, email, password } = req.body;
+            const { vendor_id, company_name, brand, contact, address, email } = req.body;
+            console.log(req.body);
 
             let updated_at = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toJSON().slice(0, 19).replace('T', ' ');
 
-            const [rows, fields] = await Account.update( user_id,full_name, email, password, role_type, updated_at);
+            const [rows, fields] = await Vendors.update( vendor_id, company_name, brand, contact, address, email, updated_at);
             res.status(200).json(rows);
             
         } catch (error) {
@@ -75,12 +73,12 @@ module.exports = {
             });
         }
     },
-
-    deleteAccount: async function(req, res) {
+    deleteVendor: async function(req, res) {
         try {
-            const { user_id } = req.params;
+            const { vendor_id } = req.params;
+            console.log(req.params);
 
-            const [rows, fields] = await Account.delete(user_id);
+            const [rows, fields] = await Vendors.delete(vendor_id);
             res.status(200).json(rows);
         } catch (error) {
             console.log(`[ERROR] ${error}`);
@@ -89,4 +87,5 @@ module.exports = {
             });
         }
     }
+
 }
