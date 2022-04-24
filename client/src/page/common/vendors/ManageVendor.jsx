@@ -44,7 +44,6 @@ function ManageVendor() {
 
         })();
     });
-    console.log(items);
 
 
     return (
@@ -102,7 +101,6 @@ function ManageVendor() {
                   </Paper>
                 </Grid>
             </Container>
-
         </Box>
     );
 }

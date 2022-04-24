@@ -22,6 +22,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Paper } from "@mui/material";
 import { height } from "@mui/system";
+import backgroundImg from '../../images/background.jpg';
 
 const theme = createTheme();
 function Register() {
@@ -72,7 +73,7 @@ function Register() {
     <ThemeProvider theme={theme}>
       <Container maxWidth="xl" 
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: `url(${require("../../images/background.jpg")})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           height: '100vh',
@@ -91,6 +92,10 @@ function Register() {
           >
             <Paper
               sx={{
+                backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',

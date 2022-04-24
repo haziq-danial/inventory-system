@@ -45,7 +45,7 @@ function App() {
           <Route index element={<DisplayReport />} />
 
           <Route path="vendors" element={<ManageVendor/>}></Route>
-            <Route path="/user/vendors/register" element={<RegisterVendor />}></Route>
+          <Route path="/user/vendors/register" element={<RegisterVendor />}></Route>
 
           <Route path="inventory" element={<ManageInventory/>}/>
           <Route

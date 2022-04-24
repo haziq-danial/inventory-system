@@ -109,7 +109,7 @@ function Login() {
     <ThemeProvider theme={theme}>
       <Container maxWidth="xl"
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: `url(${require("../../images/background.jpg")})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           height: '100vh',
@@ -120,6 +120,10 @@ function Login() {
           <CssBaseline />
             <Paper
               sx={{
+                backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
                 marginTop: 8,
                 p: 2,
                 display: 'flex',
@@ -136,7 +140,7 @@ function Login() {
                   alignItems: 'center',
                 }}
               >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <Avatar sx={{ m: 1, bgcolor: 'error.main' }}>
                   <AccountBoxIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
