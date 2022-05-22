@@ -6,8 +6,12 @@ module.exports = {
         return db.execute('SELECT * FROM items WHERE item_id = ?', [item_id]);
     },
 
+    fetchByVendorId: async function(vendor_id){
+        return db.execute('SELECT * FROM items WHERE vendor_id = ?', [vendor_id]);
+    },
+
     fetchAll: async function() {
-        return db.execute('SELECT * FROM item');
+        return db.execute('SELECT * FROM items');
     },
 
     add: async function(vendor_id, name, quantity, price_unit, barcode_id, created_at, updated_at) {

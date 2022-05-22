@@ -39,6 +39,29 @@ module.exports = {
             });
         }
     },
+
+    getItemFromVendor: async function(req, res) {
+        try {
+            
+            const { vendor_id } = req.params;
+
+            const [rows, fields] = await Items.fetchByVendorId(vendor_id);
+
+            if (rows) {
+                res.status(200).json(rows);
+            } else {
+                res.status(404).json({
+                    error: 'Item not found'
+                });
+            }
+        } catch (error) {
+            console.log(`[ERROR] ${error}`);
+            res.status(500).json({
+                error: error
+            });
+        }
+    },
+
     addItem: async function(req, res) {
         try {
             const { vendor_id, name, quantity, price_unit, barcode_id } = req.body;
