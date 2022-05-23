@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState }from 'react';
 import { Outlet } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,8 +16,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuItem from '../../components/MenuItem';
+import MenuItemProfile from '@mui/material/MenuItem';
 
 import DisplayReport from '../common/reports/DisplayReport';
+import { Avatar, ListItemIcon, Menu } from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
 
 
 const drawerWidth = 240;
@@ -69,10 +72,23 @@ const AppBar = styled(MuiAppBar, {
   const mdTheme = createTheme();
 
   function DashboardContent() {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = useState(true);
+    const [anchor, setAnchor] = useState(null);
+    const openAnchor = Boolean(anchor);
+
     const toggleDrawer = () => {
       setOpen(!open);
     };
+
+    const handleClick = (event) => {
+      setAnchor(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchor(null);
+    };
+
+
   
     return (
       <ThemeProvider theme={mdTheme}>
@@ -105,11 +121,58 @@ const AppBar = styled(MuiAppBar, {
               >
                 UMP Inventory System
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
+              <IconButton 
+                color="inherit"
+                onClick={handleClick}
+                size="small"
+              >
+               <Avatar sx={{ width: 32, height: 32 }}/> 
               </IconButton>
+              <Menu
+                anchorEl={anchor}
+                open={openAnchor}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    '&:before': {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: 'background.paper',
+                      transform: 'translateY(-50%) rotate(45deg)',
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItemProfile>
+                  <Avatar /> User Profile
+                </MenuItemProfile>
+                <Divider />
+                <MenuItemProfile>
+                  <ListItemIcon>
+                    <Logout fontSize='small' />
+                  </ListItemIcon>
+                  Logout
+                </MenuItemProfile>
+              </Menu>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
