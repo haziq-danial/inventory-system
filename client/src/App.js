@@ -8,6 +8,7 @@ import UserDashboard from './page/dashboard/User.dashboard'
 
 import ManageInventory from "./page/common/inventory/ManageInventory";
 import AddItem from "./page/common/inventory/AddItem";
+import ViewInventory from "./page/common/inventory/ViewInventory";
 
 import DisplayReport from "./page/common/reports/DisplayReport";
 
@@ -48,8 +49,9 @@ function App() {
           <Route path="/user/vendors/register" element={<RegisterVendor />}></Route>
 
           <Route path="inventory" element={<ManageInventory/>}/>
+          <Route path="/user/inventory/view/:vendor_id" element={<ViewInventory/>}/>
           <Route
-            path="/user/inventory/add"
+            path="/user/inventory/add/:vendor_id"
             element={<AddItem/>}
           />
         </Route>
