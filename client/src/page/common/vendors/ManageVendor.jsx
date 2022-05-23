@@ -1,13 +1,48 @@
-import { Box, Button, Container, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from "@mui/material";
+import { Box, Button, Container, Grid, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Title from "../../../components/Title";
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert";
 
 function ManageVendor() {
 
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
+    const [value, setValue] = useState(0);
+    const [anchor, setAnchor] = useState(null);
+    const open = Boolean(anchor);
+
+    const handleClick = (event) => {
+        setAnchor(event.currentTarget);
+        setValue(event.currentTarget.value);
+    };
+    const handleClose = () => {
+        setAnchor(null);
+    };
+
+    const handleButton = async (type) => {
+        if (type === 'delete') {
+            await Swal({
+                title: "Success",
+                text: "Test",
+                icon: "warning",
+                buttons: {
+                    cancel: 'Cancel',
+                    delete: {
+                        text: 'Delete',
+                        value: 'delete',
+                    },
+                },
+            });
+            console.log(value);
+            setAnchor(null);
+        } else {
+            console.log(value);
+            setAnchor(null);
+        }
+    };
 
     useEffect(() => {
         (async () => {
@@ -24,11 +59,10 @@ function ManageVendor() {
 
                 let rows = [];
                 let object = {};
-                let counter = 1;
 
                 response.forEach(item => {
 
-                    object.key = counter;
+                    object.vendor_id = item.vendor_id;
                     object.company_name = item.company_name;
                     object.brand = item.brand;
                     object.contact = item.contact;
@@ -36,7 +70,6 @@ function ManageVendor() {
                     object.email = item.email;
                     rows.push(object);
                     object = {};
-                    counter++;
                 });
 
                 setItems(rows);
@@ -75,6 +108,7 @@ function ManageVendor() {
                       <Table size="medium">
                         <TableHead>
                             <TableRow>
+                                <TableCell>#</TableCell>
                                 <TableCell>Company Name</TableCell>
                                 <TableCell>Brand</TableCell>
                                 <TableCell>Contact</TableCell>
@@ -84,15 +118,33 @@ function ManageVendor() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                                {items.map(item => (
-                                    <TableRow key={item.key}>
+                                {items.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{index+1}</TableCell>
                                         <TableCell>{item.company_name}</TableCell>
                                         <TableCell>{item.brand}</TableCell>
                                         <TableCell>{item.contact}</TableCell>
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>{item.email}</TableCell>
                                         <TableCell align="center">
-                                            <Button variant="contained">Action</Button>
+                                            <Button value={item.vendor_id} onClick={handleClick} endIcon={<KeyboardArrowDownIcon />} variant="contained">Action</Button>
+                                            <Menu
+                                                key={index}
+                                                anchorEl={anchor}
+                                                open={open}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                            >
+                                                <MenuItem onClick={() => handleButton('edit')}>Edit Vendor</MenuItem>
+                                                <MenuItem onClick={() => handleButton('delete')}>Delete Vendor</MenuItem>
+                                            </Menu>
                                         </TableCell>
                                     </TableRow>
                                 ))}

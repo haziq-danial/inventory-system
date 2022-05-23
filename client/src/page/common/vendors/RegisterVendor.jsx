@@ -1,4 +1,6 @@
 import { Box, Button, Container, Grid, Paper, TextField, Toolbar } from "@mui/material";
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
@@ -59,81 +61,88 @@ export default function RegisterVendor() {
         >
             <Toolbar/>
             <Container 
-                maxWidth="xs"
+                maxWidth="lg"
                 sx={{ mt: 4, mb: 4 }}
             >
-                <Grid item>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <Title>Register Vendor</Title>
-                        <Box component="form" noValidate onSubmit={registerVendor} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                    <TextField
-                                        autoComplete="company-name"
-                                        name="companyName"
-                                        required
-                                        fullWidth
-                                        label="Company Name"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                    <TextField
-                                        autoComplete="brand"
-                                        name="brand"
-                                        required
-                                        fullWidth
-                                        label="Brand Name"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                    <TextField
-                                        autoComplete="contact"
-                                        name="contact"
-                                        required
-                                        fullWidth
-                                        label="Company Contact"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                    <TextField
-                                        autoComplete="address"
-                                        name="address"
-                                        required
-                                        fullWidth
-                                        multiline
-                                        rows={4}
-                                        label="Address"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                    <TextField
-                                        autoComplete="email"
-                                        name="email"
-                                        required
-                                        fullWidth
-                                        label="Company Email"
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mb: 2 }}
-                                >
-                                Register Vendor
-                            </Button>
-                        </Box>
-                    </Paper>
+                <Grid item xs={12} mb={4} mt={4}>
+                    <Button variant="contained" startIcon={<ChevronLeft/>} onClick={() => navigate('/user/vendors')}>
+                        Back
+                    </Button>
                 </Grid>
+                <Container maxWidth="xs" sx={{ mt: 4, mb: 4 }}>
+                    <Grid item>
+                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                            <Title>Register Vendor</Title>
+                            <Box component="form" noValidate onSubmit={registerVendor} sx={{ mt: 3 }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                        <TextField
+                                            autoComplete="company-name"
+                                            name="companyName"
+                                            required
+                                            fullWidth
+                                            label="Company Name"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                        <TextField
+                                            autoComplete="brand"
+                                            name="brand"
+                                            required
+                                            fullWidth
+                                            label="Brand Name"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                        <TextField
+                                            autoComplete="contact"
+                                            name="contact"
+                                            required
+                                            fullWidth
+                                            label="Company Contact"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                        <TextField
+                                            autoComplete="address"
+                                            name="address"
+                                            required
+                                            fullWidth
+                                            multiline
+                                            rows={4}
+                                            label="Address"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                        <TextField
+                                            autoComplete="email"
+                                            name="email"
+                                            required
+                                            fullWidth
+                                            label="Company Email"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mb: 2 }}
+                                    >
+                                    Register Vendor
+                                </Button>
+                            </Box>
+                        </Paper>
+                    </Grid>
+                </Container>
             </Container>
         </Box>
     );

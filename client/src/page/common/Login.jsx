@@ -81,13 +81,13 @@ function Login() {
 					}, replace: true
 				}) */
 
-                await Swal({
+        await Swal({
 					title: "Success",
 					text: "You have successfully Logged in",
 					icon: "success",
 					button: "OK",
 				});
-                navigate('/user');
+        navigate('/user');
                 
 			} else {
                 setOpen(true);
