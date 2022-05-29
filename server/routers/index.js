@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('../middleware/jwt.middleware');
 
 router.use('/accounts', require('./account.router'));
 router.use('/auth', require('./auth.router'));

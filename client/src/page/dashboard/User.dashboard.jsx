@@ -1,5 +1,5 @@
 import { useState }from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -72,6 +72,8 @@ const AppBar = styled(MuiAppBar, {
   const mdTheme = createTheme();
 
   function DashboardContent() {
+
+    const navigate = useNavigate();
     const [open, setOpen] = useState(true);
     const [anchor, setAnchor] = useState(null);
     const openAnchor = Boolean(anchor);
@@ -88,7 +90,10 @@ const AppBar = styled(MuiAppBar, {
       setAnchor(null);
     };
 
-
+    const logout = () => {
+      localStorage.removeItem("user");
+      navigate("/login");
+    };
   
     return (
       <ThemeProvider theme={mdTheme}>
@@ -166,7 +171,7 @@ const AppBar = styled(MuiAppBar, {
                   <Avatar /> User Profile
                 </MenuItemProfile>
                 <Divider />
-                <MenuItemProfile>
+                <MenuItemProfile onClick={logout}>
                   <ListItemIcon>
                     <Logout fontSize='small' />
                   </ListItemIcon>

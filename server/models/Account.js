@@ -1,4 +1,9 @@
 const db = require('../service/mysql.service');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+// hardcoded secret key, irl this should be in a config file
+const secret = "s33eecr3t";
 
 module.exports = {
 
@@ -24,7 +29,25 @@ module.exports = {
                     default:
                         break;
                 }
-                return user;
+
+                const token = jwt.sign(
+                    {
+                        _id: user.id,
+                        email: user.email,
+                        name: user.full_name,
+                        role: user.role_type,
+                    },
+                    secret,
+                    { expiresIn: "10h" }
+                );
+
+                return {
+                    token,
+                    email: user.email,
+                    role: user.role_type,
+                    name: user.full_name,
+                    id: user.user_id
+                };
             }
 
         }

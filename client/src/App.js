@@ -1,4 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+import * as alertify from "alertifyjs";
 import logo from './logo.svg';
 import "./styles/App.module.scss";
 
@@ -37,6 +40,44 @@ function Home() {
 }
 
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!["/login", "/register", "/img"].includes(location.pathname)) {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+
+        if (user) {
+					if (user.role === "admin") {
+						if (!location.pathname.includes("/admin")) {
+							navigate("/admin", { replace: true });
+						}
+					} 
+
+          if (user.role === "user") {
+
+            if (!location.pathname.includes("/user")) {
+							navigate("/user", { replace: true });
+						}
+          }
+
+				} else {
+					alertify.error("You are not authorized");
+					navigate("/login");
+				}
+
+      } catch (error) {
+        console.log(error);
+				localStorage.removeItem("user");
+
+				alertify.error("Auth error");
+				navigate("/login");
+      }
+    }
+  }, [location, navigate]);
+
   return (
     <div className="App">
       <Routes>

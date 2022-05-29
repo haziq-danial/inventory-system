@@ -42,7 +42,7 @@ function Login() {
             
 			let res, req;
 
-			req = await fetch("http://localhost:8080/api/auth/login", {
+			req = await fetch("http://localhost:8080/ims-fyp/api/auth/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -56,30 +56,13 @@ function Login() {
 			if (req.status === 200) {
 				res = await req.json();
 
-				/* localStorage.setItem('user', JSON.stringify({
-					full_name: res.full_name,
-                    email: res.email,
-                    role_type: res.role_type
-				})); */
-
-                /* setOpen(true);
-                setAlert('success');
-                setAlertTitle('Success');
-                setAlertmsg('Welcome'); */
-
-
-
-				// const path = res.role_type === 'admin' ? '/admin/dashboard' : '/user/dashboard';
-
-				/* navigate(path, {
-					state: {
-						user: {
-							full_name: res.full_name,
-                            email: res.email,
-                            role_type: res.role_type
-						}
-					}, replace: true
-				}) */
+				localStorage.setItem('user', JSON.stringify({
+          id: res.id,
+          email: res.email,
+          name: res.name,
+          role: res.role,
+          token: res.token
+        }));
 
         await Swal({
 					title: "Success",

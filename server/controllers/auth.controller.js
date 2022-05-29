@@ -11,7 +11,13 @@ module.exports = {
             const account = await Account.login(email, password);
 
             if (account) {
-                res.status(200).json(account);
+                res.status(200).json({
+                    id: account.id,
+                    token: account.token,
+                    email: account.email,
+                    name: account.name,
+                    role: account.role
+                });
             } else {
                 res.status(401).json({
 					error: "User not found/ wrong password",
