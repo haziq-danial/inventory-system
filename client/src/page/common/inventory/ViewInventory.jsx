@@ -1,10 +1,9 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import { Box, Button, Container, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from '@mui/material';
+import { Box, Button, Container, Grid, Menu, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, Toolbar } from '@mui/material';
 import Title from '../../../components/Title';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AddIcon from '@mui/icons-material/Add';
 
-import * as React from 'react';
 import { Routes, Route, Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 
@@ -12,7 +11,25 @@ function ViewInventory() {
 
     const navigate = useNavigate();
     const { vendor_id } = useParams();
-    const [items, setItems] = React.useState([]);
+    const [items, setItems] = useState([]);
+
+    const [value, setValue] = useState(0);
+    const [anchor, setAnchor] = useState(null);
+    const open = Boolean(anchor);
+
+    const handleClick = (event) => {
+        setAnchor(event.currentTarget);
+        setValue(event.currentTarget.value);
+    };
+    const handleClose = () => {
+        console.log(value);
+        setAnchor(null);
+    };
+
+    const handleNavigate = () => {
+        setAnchor(null);
+        navigate(`/user/inventory/view/qr-code/${value}`);
+    };
 
     useEffect(() => {
         (async () => {
@@ -50,23 +67,23 @@ function ViewInventory() {
 
     return (
         <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-        }}
+            component="main"
+            sx={{
+            backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+            }}
         >
             <Toolbar/>
             <Container
                 maxWidth="lg"
                 sx={{ mt: 4, mb: 4 }}
             >
-                <Grid container direction="row" justifyContent="space-between" xs={12} mb={4} mt={4}>
+                <Grid item container direction="row" justifyContent="space-between" xs={12} mb={4} mt={4}>
                     <Grid item xs>
                         <Button variant="contained" startIcon={<ChevronLeft/>} onClick={() => navigate('/user/inventory')}>
                             Back
@@ -104,7 +121,22 @@ function ViewInventory() {
                                         <TableCell>{item.barcode_id}</TableCell>
                                         <TableCell align='center'>{item.price_unit}</TableCell>
                                         <TableCell align='center'>
-                                        <Button endIcon={<KeyboardArrowDownIcon />} variant="contained">Action</Button>
+                                            <Button value={item.item_id} onClick={handleClick} endIcon={<KeyboardArrowDownIcon />} variant="contained">Action</Button>
+                                            <Menu
+                                                anchorEl={anchor}
+                                                open={open}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'left',
+                                                }}
+                                            >
+                                                <MenuItem onClick={handleNavigate}>Generate qr code</MenuItem>
+                                            </Menu>
                                         </TableCell>
                                     </TableRow>
                                 ))}

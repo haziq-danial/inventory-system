@@ -18,6 +18,7 @@ import DisplayReport from "./page/common/reports/DisplayReport";
 import ManageVendor from "./page/common/vendors/ManageVendor";
 import RegisterVendor from "./page/common/vendors/RegisterVendor";
 import EditVendor from "./page/common/vendors/EditVendor";
+import QRPageGenerator from "./page/common/inventory/QRPageGenerator";
 
 
 function Home() {
@@ -91,6 +92,7 @@ function App() {
 
           <Route path="inventory" element={<ManageInventory/>}/>
           <Route path="/user/inventory/view/:vendor_id" element={<ViewInventory/>}/>
+          <Route path="/user/inventory/view/qr-code/:item_id" element={<QRPageGenerator/>}/>
           <Route
             path="/user/inventory/add/:vendor_id"
             element={<AddItem/>}
