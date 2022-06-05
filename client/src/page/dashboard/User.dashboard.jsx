@@ -124,7 +124,7 @@ const AppBar = styled(MuiAppBar, {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                UMP Inventory System
+                Cafe Inventory System
               </Typography>
               <IconButton 
                 color="inherit"
