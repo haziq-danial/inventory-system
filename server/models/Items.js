@@ -20,7 +20,7 @@ module.exports = {
 
     update: async function(item_id, vendor_id, name, quantity, price_unit, barcode_id, updated_at) {
 
-        return db.execute('UPDATE items SET vendor_id = ?, name = ?, quantity = ?, price_unit = ?, barcode_id = ?, updated_at = ? WHERE item_id = ?', [vendor_id, name, quantity, price_unit, barcode_id, updated_at, item_id]);
+        return db.execute('UPDATE items SET name = ?, quantity = ?, price_unit = ?, barcode_id = ?, updated_at = ? WHERE item_id = ? AND vendor_id = ?', [name, quantity, price_unit, barcode_id, updated_at, item_id, vendor_id]);
     },
 
     delete: async function(item_id) {

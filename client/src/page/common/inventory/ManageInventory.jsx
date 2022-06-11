@@ -29,7 +29,11 @@ function ManageInventory() {
 
     useEffect(() => {
         (async () => {
+            const controller = new AbortController();
+            const signal = controller.signal;
+
             let request = await fetch("http://localhost:8080/ims-fyp/api/vendors/get", {
+                signal: signal,
                 method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -56,6 +60,10 @@ function ManageInventory() {
                 });
 
                 setItems(rows);
+            }
+
+            return () => {
+                controller.abort();
             }
         })();
     });

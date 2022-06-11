@@ -26,20 +26,32 @@ function ViewInventory() {
         setAnchor(null);
     };
 
-    const handleNavigate = () => {
+    const handleNavigate = (route) => {
         setAnchor(null);
-        navigate(`/user/inventory/view/qr-code/${value}`);
+        if (route === 'generate qr code') {
+            navigate(`/user/inventory/view/qr-code/${value}`);
+        }
+
+        if (route === 'edit item') {
+            navigate(`/user/inventory/edit/${value}`);
+        }
     };
 
     useEffect(() => {
         (async () => {
             
+            const controller = new AbortController();
+            const signal = controller.signal;
+
             let request = await fetch("http://localhost:8080/ims-fyp/api/items/find/vendor/"+vendor_id, {
+                signal: signal,
                 method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                     },
             });
+
+            
             
             if(request.status === 200) {
                 let response = await request.json();
@@ -60,8 +72,12 @@ function ViewInventory() {
                 });
 
                 setItems(rows);
-            }
 
+            }
+            return () => {
+                controller.abort();
+            }
+            
         })();
     });
 
@@ -135,7 +151,9 @@ function ViewInventory() {
                                                     horizontal: 'left',
                                                 }}
                                             >
-                                                <MenuItem onClick={handleNavigate}>Generate qr code</MenuItem>
+                                                <MenuItem onClick={() => {handleNavigate('generate qr code')}}>Generate qr code</MenuItem>
+                                                <MenuItem onClick={() => {handleNavigate('edit item')}}>Edit Item</MenuItem>
+                                                <MenuItem>Delete Item</MenuItem>
                                             </Menu>
                                         </TableCell>
                                     </TableRow>

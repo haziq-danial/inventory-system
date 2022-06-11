@@ -1,67 +1,45 @@
 import { Box, Button, Container, Grid, Paper, TextField, Toolbar } from "@mui/material";
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
-
 import { useNavigate, useParams } from "react-router-dom";
 import Title from "../../../components/Title";
 import { useEffect, useState } from "react";
-
 import swal from "sweetalert";
 
-export default function EditVendor() {
+export default function EditItem() {
     const navigate = useNavigate();
-    const { vendor_id } = useParams();
-    const [vendor, setVendor] = useState({});
-    const [empty_string, setEmptyString] = useState('');
-    const [company_name, setCompanyName] = useState("");
-    const [brand, setBrand] = useState("");
-    const [contact, setContact] = useState("");
-    const [address, setAddress] = useState("");
-    const [email, setEmail] = useState("");
+    const { item_id } = useParams();
 
-    const handleChange = (event) => {
-        switch (event.target.name) {
-            case "companyName":
-                setCompanyName(event.target.value);
-                break;
-            case "brand":
-                setBrand(event.target.value);
-                break;
-            case "contact":
-                setContact(event.target.value);
-                break;
-            case "address":
-                setAddress(event.target.value);
-                break;
-            case "email":
-                setEmail(event.target.value);
-                break;
-        }
-        
-    };
-    const editVendor = async (event) => {
+    const [item, setItem] = useState({});
+    const [name, setName] = useState("");
+    const [quantity, setQuantity] = useState(0);
+    const [price_unit, setPriceUnit] = useState(0);
+    const [barcode_id, setBarcodeId] = useState("");
+
+    const updateItem = async (event) => {
         try {
             event.preventDefault();
+
             const data = new FormData(event.currentTarget);
 
-            const response = await fetch("http://localhost:8080/ims-fyp/api/vendors/update", {
+            const response = await fetch("http://localhost:8080/ims-fyp/api/items/update", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    vendor_id: vendor.vendor_id,
-                    company_name: data.get('companyName'),
-                    brand: data.get('brand'),
-                    contact: data.get('contact'),
-                    address: data.get('address'),
-                    email: data.get('email')
+                    item_id: item_id,
+                    vendor_id: item.vendor_id,
+                    name: name,
+                    quantity: quantity,
+                    price_unit: price_unit,
+                    barcode_id: barcode_id
                 })
             });
 
             if (response.status === 200) {
                 await swal({
                     title: "Success",
-                    text: "Succesfully update vendor",
+                    text: "Succesfully update item",
                     icon: "success",
                     button: "OK"
                 });
@@ -73,11 +51,28 @@ export default function EditVendor() {
         }
     };
 
-    const loadData = async () => {
+    const handleChange = (event) => {
+        switch (event.target.name) {
+            case "name":
+                setName(event.target.value);
+                break;
+            case "quantity":
+                setQuantity(event.target.value);
+                break;
+            case "price_unit":
+                setPriceUnit(event.target.value);
+                break;
+            case "barcode_id":
+                setBarcodeId(event.target.value);
+                break;
+        }
+    };
+
+    const loadData =async () => {
         const controller = new AbortController();
         const signal = controller.signal;
 
-        let request = await fetch("http://localhost:8080/ims-fyp/api/vendors/find/"+vendor_id, {
+        let request = await fetch("http://localhost:8080/ims-fyp/api/items/find/"+item_id, {
             signal: signal,
             method: "GET",
             headers: {
@@ -88,7 +83,7 @@ export default function EditVendor() {
         if (request.status === 200) {
             let response = await request.json();
             
-            setVendor(response[0]);
+            setItem(response[0]);
 
         }
 
@@ -99,21 +94,17 @@ export default function EditVendor() {
 
     useEffect(() => {
         (async () => {
-            // console.log(vendor);
-            if (Object.keys(vendor).length === 0) {
-                console.log('vendor is empty');
+            if (Object.keys(item).length === 0) {
+                console.log('item is empty');
                 await loadData();
             } else {
-                console.log('data exist');
-                console.log(vendor);
-                setCompanyName(vendor.company_name);
-                setBrand(vendor.brand);
-                setContact(vendor.contact);
-                setAddress(vendor.address);
-                setEmail(vendor.email);
+                setName(item.name);
+                setQuantity(item.quantity);
+                setPriceUnit(item.price_unit);
+                setBarcodeId(item.barcode_id);
             }
-        })();
-    }, [vendor]);
+        })()
+    }, [item]);
 
     return (
         <Box
@@ -142,17 +133,17 @@ export default function EditVendor() {
                 <Container maxWidth="xs" sx={{ mt: 4, mb: 4 }}>
                     <Grid item>
                         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <Title>Edit Vendor</Title>
-                            <Box component="form" noValidate onSubmit={editVendor} sx={{ mt: 3 }}>
+                            <Title>Edit Item</Title>
+                            <Box component="form" noValidate onSubmit={updateItem}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12} sx={{ mb:3 }}>
                                         <TextField
-                                            autoComplete="company-name"
-                                            name="companyName"
+                                            autoComplete="item-name"
+                                            name="name"
                                             required
                                             fullWidth
-                                            label="Company Name"
-                                            value={company_name || ""}
+                                            label="Item Name"
+                                            value={name || ""}
                                             onChange={handleChange}
                                         />
                                     </Grid>
@@ -160,26 +151,13 @@ export default function EditVendor() {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12} sx={{ mb:3 }}>
                                         <TextField
-                                            autoComplete="brand"
-                                            name="brand"
+                                            autoComplete="item-quantity"
+                                            name="quantity"
                                             required
                                             fullWidth
-                                            label="Brand Name"
-                                            value={brand || ""}
-                                            onChange={handleChange}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                        <TextField
-                                            autoComplete="contact"
-                                            name="contact"
-                                            required
-                                            fullWidth
-                                            label="Company Contact"
                                             type="number"
-                                            value={contact || ""}
+                                            label="Quantity"
+                                            value={quantity || ""}
                                             onChange={handleChange}
                                         />
                                     </Grid>
@@ -187,14 +165,13 @@ export default function EditVendor() {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12} sx={{ mb:3 }}>
                                         <TextField
-                                            autoComplete="address"
-                                            name="address"
+                                            autoComplete="item-price-unit"
+                                            name="price_unit"
                                             required
                                             fullWidth
-                                            multiline
-                                            rows={4}
-                                            label="Address"
-                                            value={address || ""}
+                                            type="number"
+                                            label="Price Unit"
+                                            value={price_unit || ""}
                                             onChange={handleChange}
                                         />
                                     </Grid>
@@ -202,12 +179,12 @@ export default function EditVendor() {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12} sx={{ mb:3 }}>
                                         <TextField
-                                            autoComplete="email"
-                                            name="email"
+                                            autoComplete="item-barcode-id"
+                                            name="barcode_id"
                                             required
                                             fullWidth
-                                            label="Company Email"
-                                            value={email || ""}
+                                            label="Barcode ID"
+                                            value={barcode_id || ""}
                                             onChange={handleChange}
                                         />
                                     </Grid>
@@ -218,7 +195,7 @@ export default function EditVendor() {
                                     variant="contained"
                                     sx={{ mb: 2 }}
                                     >
-                                    Edit Vendor
+                                    Update Item
                                 </Button>
                             </Box>
                         </Paper>

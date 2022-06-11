@@ -22,6 +22,11 @@ function ManageVendor() {
         setAnchor(null);
     };
 
+    const navigateToEdit = () => {
+        setAnchor(null);
+        navigate(`/user/vendors/edit/${value}`);
+    };
+
     const handleButton = async (type) => {
         if (type === 'delete') {
             await Swal({
@@ -46,12 +51,15 @@ function ManageVendor() {
 
     useEffect(() => {
         (async () => {
-            
+            const controller = new AbortController();
+            const signal = controller.signal;
+
             let request = await fetch("http://localhost:8080/ims-fyp/api/vendors/get", {
+                signal: signal,
                 method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
             
             if(request.status === 200) {
@@ -73,6 +81,10 @@ function ManageVendor() {
                 });
 
                 setItems(rows);
+            }
+
+            return () => {
+                controller.abort();
             }
 
         })();
@@ -142,7 +154,7 @@ function ManageVendor() {
                                                     horizontal: 'left',
                                                 }}
                                             >
-                                                <MenuItem onClick={() => handleButton('edit')}>Edit Vendor</MenuItem>
+                                                <MenuItem onClick={navigateToEdit}>Edit Vendor</MenuItem>
                                                 <MenuItem onClick={() => handleButton('delete')}>Delete Vendor</MenuItem>
                                             </Menu>
                                         </TableCell>

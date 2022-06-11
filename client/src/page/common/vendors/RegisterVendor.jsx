@@ -104,6 +104,7 @@ export default function RegisterVendor() {
                                             required
                                             fullWidth
                                             label="Company Contact"
+                                            type="number"
                                         />
                                     </Grid>
                                 </Grid>

@@ -12,6 +12,7 @@ import UserDashboard from './page/dashboard/User.dashboard'
 import ManageInventory from "./page/common/inventory/ManageInventory";
 import AddItem from "./page/common/inventory/AddItem";
 import ViewInventory from "./page/common/inventory/ViewInventory";
+import EditItem from "./page/common/inventory/EditItem";
 
 import DisplayReport from "./page/common/reports/DisplayReport";
 
@@ -89,9 +90,11 @@ function App() {
 
           <Route path="vendors" element={<ManageVendor/>}></Route>
           <Route path="/user/vendors/register" element={<RegisterVendor />}></Route>
+          <Route path="/user/vendors/edit/:vendor_id" element={<EditVendor/>}/>
 
           <Route path="inventory" element={<ManageInventory/>}/>
           <Route path="/user/inventory/view/:vendor_id" element={<ViewInventory/>}/>
+          <Route path="/user/inventory/edit/:item_id" element={<EditItem/>}/>
           <Route path="/user/inventory/view/qr-code/:item_id" element={<QRPageGenerator/>}/>
           <Route
             path="/user/inventory/add/:vendor_id"
