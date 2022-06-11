@@ -27,12 +27,30 @@ function ManageVendor() {
         navigate(`/user/vendors/edit/${value}`);
     };
 
+    const deleteVendor = async () => {
+        try {
+            let request = await fetch("http://localhost:8080/ims-fyp/api/vendors/delete/"+value, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            if (request.status === 200``) {
+                let response = await request.json();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleButton = async (type) => {
         if (type === 'delete') {
             await Swal({
-                title: "Success",
-                text: "Test",
+                title: "Are You Sure?",
+                text: "Do you want to proceed to deleteing this vendor?",
                 icon: "warning",
+                dangerMode: true,
                 buttons: {
                     cancel: 'Cancel',
                     delete: {
@@ -40,6 +58,13 @@ function ManageVendor() {
                         value: 'delete',
                     },
                 },
+            }).then(async (willDelete) => {
+                if (willDelete) {
+                    await deleteVendor();
+                    Swal("Succesfully delete item!!", {
+                        icon: "success"
+                    });
+                }
             });
             console.log(value);
             setAnchor(null);

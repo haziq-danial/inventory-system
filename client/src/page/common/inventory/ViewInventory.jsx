@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { Routes, Route, Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import swal from 'sweetalert';
 
 function ViewInventory() {
 
@@ -35,6 +36,46 @@ function ViewInventory() {
         if (route === 'edit item') {
             navigate(`/user/inventory/edit/${value}`);
         }
+    };
+
+    const handleDelete =async () => {
+      await swal({
+        title: "Are You Sure?",
+        text: "Do you want to proceed to deleteing this vendor?",
+        icon: "warning",
+        dangerMode: true,
+        buttons: {
+            cancel: 'Cancel',
+            delete: {
+                text: 'Delete',
+                value: 'delete',
+            },
+        },
+      }).then(async (willDelete) => {
+        if (willDelete) {
+            await deleteItem();
+            swal("Succesfully delete item!!", {
+                icon: "success"
+            });
+        }
+      });  
+    };
+
+    const deleteItem =async () => {
+      try {
+            let request = await fetch("http://localhost:8080/ims-fyp/api/items/delete/"+value, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            if (request.status === 200``) {
+                let response = await request.json();
+            }
+      } catch (error) {
+        console.error(error);
+      }  
     };
 
     useEffect(() => {
@@ -153,7 +194,7 @@ function ViewInventory() {
                                             >
                                                 <MenuItem onClick={() => {handleNavigate('generate qr code')}}>Generate qr code</MenuItem>
                                                 <MenuItem onClick={() => {handleNavigate('edit item')}}>Edit Item</MenuItem>
-                                                <MenuItem>Delete Item</MenuItem>
+                                                <MenuItem onClick={handleDelete}>Delete Item</MenuItem>
                                             </Menu>
                                         </TableCell>
                                     </TableRow>

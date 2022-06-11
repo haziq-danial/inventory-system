@@ -1,4 +1,5 @@
 const Vendors = require('../models/Vendors');
+const Items = require('../models/Items');
 
 
 module.exports = {
@@ -79,7 +80,8 @@ module.exports = {
             const { vendor_id } = req.params;
             console.log(req.params);
 
-            const [rows, fields] = await Vendors.delete(vendor_id);
+            let [rows, fields] = await Vendors.delete(vendor_id);
+            [rows, fields] = await Items.deleteByVendor(vendor_id);
             res.status(200).json(rows);
         } catch (error) {
             console.log(`[ERROR] ${error}`);

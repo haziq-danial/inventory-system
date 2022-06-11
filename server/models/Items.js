@@ -25,6 +25,10 @@ module.exports = {
 
     delete: async function(item_id) {
         return db.execute('DELETE FROM items WHERE item_id = ?', [item_id]);
+    },
+
+    deleteByVendor: async function(vendor_id) {
+        return db.execute('DELETE FROM items WHERE vendor_id = ?', [vendor_id]);
     }
 
 }
