@@ -61,7 +61,10 @@ module.exports = {
 
     updateAccount: async function(req, res) {
         try {
-            const { user_id, full_name, email, password } = req.body;
+            let { user_id, full_name, role_type, email, password } = req.body;
+
+            user_id = parseInt(user_id);
+            role_type = parseInt(role_type);
 
             let updated_at = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toJSON().slice(0, 19).replace('T', ' ');
 

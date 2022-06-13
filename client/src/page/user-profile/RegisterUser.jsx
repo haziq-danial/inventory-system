@@ -1,42 +1,49 @@
-import { Box, Button, Container, Grid, Paper, TextField, Toolbar } from "@mui/material";
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Toolbar } from "@mui/material";
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import Title from "../../../components/Title";
+import Title from "../../components/Title";
 
 
-export default function RegisterVendor() {
+export default function RegisterUser() {
 
     const navigate = useNavigate();
-    const registerVendor = async (event) => {
+    const [role, setRole] = useState(1);
+
+    const handleChangeRole = (event: SelectChangeEvent) => {
+        setRole(event.target.value);
+    }
+
+    const registerUser = async (event) => {
         try {
             event.preventDefault();
             const data = new FormData(event.currentTarget);
+            
+            let full_name = data.get('firstName') + " " + data.get('lastName');
 
-            const response = await fetch("http://localhost:8080/ims-fyp/api/vendors/add", {
+            const response = await fetch("http://localhost:8080/ims-fyp/api/accounts/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    company_name: data.get('companyName'),
-                    brand: data.get('brand'),
-                    contact: data.get('contact'),
-                    address: data.get('address'),
-                    email: data.get('email')
-                })
+                    full_name: full_name,
+                    role_type: role,
+                    email: data.get('email'),
+                    password: data.get('password')
+                }),
             });
 
             if(response.status === 200) {
                 await swal({
                     title: "Success",
-                    text: "Successfully registered vendor",
+                    text: "Successfully registered user",
                     icon: "success",
                     button: "OK",
                 });
-                navigate('/user/vendors');
+                navigate(-1);
             }
 
 
@@ -72,73 +79,65 @@ export default function RegisterVendor() {
                 <Container maxWidth="xs" sx={{ mt: 4, mb: 4 }}>
                     <Grid item>
                         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <Title>Register Vendor</Title>
-                            <Box component="form" noValidate onSubmit={registerVendor} sx={{ mt: 3 }}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                            <Title>Register User</Title>
+                            <Box component="form" noValidate onSubmit={registerUser} sx={{ mt: 3 }}>
+                                <Grid container spacing={2} sx={{ mb: 3 }}>
+                                    <Grid item xs={12} sm={6}>
                                         <TextField
-                                            autoComplete="company-name"
-                                            name="companyName"
+                                            name="firstName"
                                             required
                                             fullWidth
-                                            label="Company Name"
+                                            label="First Name"
                                         />
                                     </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                    <Grid item xs={12} sm={6}>
                                         <TextField
-                                            autoComplete="brand"
-                                            name="brand"
+                                            name="lastName"
                                             required
                                             fullWidth
-                                            label="Brand Name"
+                                            label="Last Name"
                                         />
                                     </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                        <TextField
-                                            autoComplete="contact"
-                                            name="contact"
-                                            required
-                                            fullWidth
-                                            label="Company Contact"
-                                            type="number"
-                                        />
+                                    <Grid item xs={12} sm={12}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>Role</InputLabel>
+                                            <Select
+                                                value={role}
+                                                label="Role Type"
+                                                onChange={handleChangeRole}
+                                            >
+                                                <MenuItem value={1}>Admin</MenuItem>
+                                                <MenuItem value={2}>User</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
+                                    <Grid item xs={12} sm={12}>
                                         <TextField
-                                            autoComplete="address"
-                                            name="address"
-                                            required
-                                            fullWidth
-                                            multiline
-                                            rows={4}
-                                            label="Address"
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12} sx={{ mb:3 }}>
-                                        <TextField
-                                            autoComplete="email"
                                             name="email"
                                             required
                                             fullWidth
-                                            label="Company Email"
+                                            label="Email"
+                                            type="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12}>
+                                        <TextField
+                                            name="password"
+                                            required
+                                            fullWidth
+                                            label="password"
+                                            type="password"
                                         />
                                     </Grid>
                                 </Grid>
+                                
                                 <Button
                                     type="submit"
                                     fullWidth
                                     variant="contained"
                                     sx={{ mb: 2 }}
                                 >
-                                    Register Vendor
+                                    Register User
                                 </Button>
                             </Box>
                         </Paper>

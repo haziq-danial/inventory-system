@@ -13,13 +13,30 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+
 import { ListItem } from '@mui/material';
 
 export default function MenuItem() {
 
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+  let menuItems = [];
 
-  const menuItems = [
+  const adminItems = [
+    {
+      text: 'Dashboard',
+      icon: <DashboardIcon/>,
+      path: '/admin'
+    },
+    {
+      text: 'Manage Users',
+      icon: <ManageAccountsIcon/>,
+      path: ""
+    }
+  ];
+
+  const userItems = [
     {
       text: 'Dashboard',
       icon: <DashboardIcon/>,
@@ -41,6 +58,16 @@ export default function MenuItem() {
       path: '/user/vendors'
     }
   ];
+
+  if (user) {
+    if (user.role === 'admin') {
+      menuItems = adminItems;
+    }
+
+    if (user.role === 'user') {
+      menuItems = userItems;
+    }
+  }
 
   return (
     <Fragment>

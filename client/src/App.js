@@ -21,6 +21,10 @@ import RegisterVendor from "./page/common/vendors/RegisterVendor";
 import EditVendor from "./page/common/vendors/EditVendor";
 import QRPageGenerator from "./page/common/inventory/QRPageGenerator";
 
+import ManageUsers from "./page/user-profile/ManageUsers";
+import RegisterUser from "./page/user-profile/RegisterUser";
+import EditUser from "./page/user-profile/EditUser";
+
 
 function Home() {
 	return (
@@ -46,38 +50,45 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!["/login", "/register", "/img"].includes(location.pathname)) {
-      try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        console.log(user);
 
-        if (user) {
-					if (user.role === "admin") {
-						if (!location.pathname.includes("/admin")) {
-							navigate("/admin", { replace: true });
-						}
-					} 
-
-          if (user.role === "user") {
-
-            if (!location.pathname.includes("/user")) {
-							navigate("/user", { replace: true });
-						}
+    let mounted = true;
+    if (mounted) {
+      if (!["/login", "/register", "/img"].includes(location.pathname)) {
+        try {
+          const user = JSON.parse(localStorage.getItem("user"));
+          console.log(user);
+  
+          if (user) {
+            if (user.role === "admin") {
+              if (!location.pathname.includes("/admin")) {
+                navigate("/admin", { replace: true });
+              }
+            } 
+  
+            if (user.role === "user") {
+  
+              if (!location.pathname.includes("/user")) {
+                navigate("/user", { replace: true });
+              }
+            }
+  
+          } else {
+            alertify.error("You are not authorized");
+            navigate("/login");
           }
-
-				} else {
-					alertify.error("You are not authorized");
-					navigate("/login");
-				}
-
-      } catch (error) {
-        console.log(error);
-				localStorage.removeItem("user");
-
-				alertify.error("Auth error");
-				navigate("/login");
+  
+        } catch (error) {
+          console.log(error);
+          localStorage.removeItem("user");
+  
+          alertify.error("Auth error");
+          navigate("/login");
+        }
       }
     }
+    
+
+    return () => mounted = false;
   }, [location, navigate]);
 
   return (
@@ -100,6 +111,11 @@ function App() {
             path="/user/inventory/add/:vendor_id"
             element={<AddItem/>}
           />
+        </Route>
+        <Route path="/admin" element={<UserDashboard/>}>
+          <Route index element={<ManageUsers/>}/>
+          <Route path="/admin/users/add-user" element={<RegisterUser/>}/>
+          <Route path="/admin/users/edit/:user_id" element={<EditUser/>}/>
         </Route>
       </Routes>
     </div>

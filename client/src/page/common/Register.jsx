@@ -152,6 +152,7 @@ function Register() {
                       id="email"
                       label="Email Address"
                       name="email"
+                      type="email"
                       autoComplete="email"
                     />
                   </Grid>
