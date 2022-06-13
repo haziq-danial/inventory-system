@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate } from "react-router-dom";
 import Title from "../../components/Title";
 import { useEffect, useState } from "react";
+import swal from "sweetalert";
 
 
 export default function ManageUsers() {
@@ -30,6 +31,54 @@ export default function ManageUsers() {
         setAnchor(null);
         navigate(`/admin/users/edit/${value}`);
     };
+
+    const deleteUser = async () => {
+        try {
+            let request = await fetch("http://localhost:8080/ims-fyp/api/accounts/delete/"+value, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            if (request.status === 200) {
+                let response = await request.json();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleButton = async (type) => {
+        if (type === 'delete') {
+            await swal({
+                title: "Are You Sure?",
+                text: "Do you want to proceed to delete this user?",
+                icon: "warning",
+                dangerMode: true,
+                buttons: {
+                    cancel: 'Cancel',
+                    delete: {
+                        text: 'Delete',
+                        value: 'delete',
+                    },
+                },
+            }).then(async (willDelete) => {
+                if (willDelete) {
+                    await deleteUser();
+                    swal("Succesfully delete item!!", {
+                        icon: "success"
+                    });
+                }
+            });
+            await 
+            console.log(value);
+            setAnchor(null);
+        } else {
+            console.log(value);
+            setAnchor(null);
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -75,7 +124,7 @@ export default function ManageUsers() {
                 controller.abort();
             }
         })();
-    }, []);
+    });
 
     return (
         <Box
@@ -141,7 +190,7 @@ export default function ManageUsers() {
                                                 }}
                                             >
                                                 <MenuItem onClick={handleNavigate}>Edit User</MenuItem>
-                                                <MenuItem>Delete User</MenuItem>
+                                                <MenuItem onClick={() => handleButton('delete')}>Delete User</MenuItem>
                                             </Menu>
                                         </TableCell>
                                     </TableRow>
