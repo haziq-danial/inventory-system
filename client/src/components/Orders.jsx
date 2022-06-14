@@ -24,16 +24,15 @@ export default function Orders({ vendors, inventory }) {
   
   inventory.forEach(items => {
     let totalSale = items.quantity * items.price_unit;
-    sale_amount = [...sale_amount, totalSale];
-  });
 
-  vendors.forEach((items, index) => {
-    obj.brand_name = items.brand;
-    obj.address = items.address;
-    obj.sale_amount = sale_amount[index];
+    obj.item_name = items.name;
+    obj.quantity = items.quantity;
+    obj.sale_amount = totalSale;
     rows.push(obj);
     obj = {};
   });
+
+  
 
   console.log(sale_amount);
 
@@ -43,16 +42,16 @@ export default function Orders({ vendors, inventory }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Brand Name</TableCell>
-            <TableCell>Address</TableCell>
+            <TableCell>Item name</TableCell>
+            <TableCell>Quantity</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.brand_name}</TableCell>
-              <TableCell>{row.address}</TableCell>
+              <TableCell>{row.item_name}</TableCell>
+              <TableCell>{row.quantity}</TableCell>
               <TableCell align="right">{`MYR${row.sale_amount}`}</TableCell>
             </TableRow>
           ))}
