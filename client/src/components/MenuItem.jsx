@@ -43,11 +43,6 @@ export default function MenuItem() {
       path: '/user'
     },
     {
-      text: 'Reports',
-      icon: <BarChartIcon/>,
-      path: '/user'
-    },
-    {
       text: 'Inventory',
       icon: <InventoryIcon/>,
       path: '/user/inventory'
